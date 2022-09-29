@@ -18,7 +18,7 @@ import "./assets/css/tailwind.css";
 
 const channel = useChannel();
 
-const has_channel = computed(() => channel.value.length > 3);
+const has_channel = computed(() => channel.value.length > 0);
 </script>
 
 
