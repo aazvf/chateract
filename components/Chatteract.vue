@@ -47,10 +47,11 @@ const on_message = (channel, tags, message, self) => {
         increment_word(key);
     }
 
-    messages.value.unshift(message);
-    if (message_count.value > chat_limit) {
-        messages.value.pop();
-    }
+    messages.value[(message_count.value - 1) % chat_limit] = message;
+    // messages.value.unshift(message);
+    // if (message_count.value > chat_limit) {
+    // messages.value.pop();
+    // }
 };
 
 const on_message_deleted = (channel, tags, message, self) => {
@@ -158,9 +159,22 @@ const bar_interval = setInterval(() => {
 }, 1000);
 
 const sorted_words = computed(() => {
-    return Object.entries(words.value)
+    if (Object.entries(words.value).length < 1) {
+        return [];
+    }
+
+    const entries = Object.entries(words.value)
         .sort((a, b) => b[1] - a[1])
         .slice(0, chat_limit);
+
+    const max = typeof entries[0] === "object" ? entries[0][1] : 1;
+
+    return entries.map((w) => {
+        const percent =
+            (Math.min(1, 0.3 + 0.7 * (w[1] / max)) * 100).toFixed(1) + "%";
+        w.push(percent);
+        return w;
+    });
     // .map((w) => w[0] + " " + w[1].toFixed(1));
     // return words.value.sort((a, b) => b.count - a.count).slice(0, 10);
 });
@@ -173,6 +187,7 @@ const message_to_ngram = (message) =>
 <template>
     <div class="flex">
         <!-- <div class="w-96 p-4 bg-purple-50 rounded-lg mr-6 pt-12 shadow">
+            {{ message_count }}
             <div
                 class="mb-2 border border-purple-500 bg-sky-50 text-purple-900 shadow-md p-4 rounded-md tracking-wide text-sm transition-all"
                 v-for="(message, index) in messages"
@@ -181,7 +196,7 @@ const message_to_ngram = (message) =>
         </div>-->
 
         <div class="w-96 p-4 bg-purple-50 rounded-lg shadow">
-            <div class="bg-purple-200 rounded-md w-full h-6 mb-2 overflow-hidden relative">
+            <div class="bg-purple-200 rounded-md w-full h-1 mb-2 overflow-hidden relative">
                 <div
                     class="w-full h-full rounded-md transition-all ease-linear"
                     :class="(time() < 1  || time() > 9) ? 'bg-rose-300 duration-300 opacity-30' : 'bg-purple-500 duration-1000 opacity-100'"
@@ -189,12 +204,17 @@ const message_to_ngram = (message) =>
                 ></div>
             </div>
             <div
-                class="mb-2 border border-purple-500 bg-sky-50 text-purple-900 shadow-md p-4 rounded-md tracking-wide text-sm transition-all flex"
+                class="mb-2 border border-purple-500 bg-sky-50 text-purple-900 shadow-md p-4 rounded-lg tracking-wide text-sm transition-all flex relative"
+                :class="index === 0 ? 'border-yellow-500 italic' : ''"
                 v-for="(word, index) in sorted_words"
                 :key="index"
             >
-                <div>{{ word[0].slice(0,38) }}</div>
-                <div class="ml-auto">{{ word[1].toFixed(1) }}</div>
+                <div class="z-10">{{ word[0].slice(0,38) }}</div>
+                <div class="ml-auto z-10">{{ word[1].toFixed(1) }}</div>
+                <div
+                    class="absolute left-0 top-0 h-full bg-emerald-500/50 transition-[width] duration-300 rounded-lg"
+                    :style="{width: word[2]}"
+                ></div>
             </div>
         </div>
     </div>
