@@ -86,6 +86,9 @@ client.on("messagedeleted", on_message_deleted);
 client.on("connecting", on_connecting);
 client.on("connected", on_connected);
 
+const logo = useLogo();
+const randInt = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
+
 const clearout = () => {
     console.log("clearout!!!");
     Object.keys(words.value).forEach((word) => {
@@ -95,6 +98,9 @@ const clearout = () => {
             // words.value[word] = undefined;
         }
     });
+
+    logo.value = randInt(1, 51);
+
     // words.value = words.value
     //     .filter((w) => w.count > 1)
     //     .map((w) => {
