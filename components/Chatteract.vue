@@ -278,61 +278,59 @@ const message_to_ngram = (message) =>
 
 
 <template>
-    <div class="flex">
-        <!-- <div class="w-96 p-4 bg-purple-50 rounded-lg mr-6 pt-12 shadow">
+    <div>
+        <div
+            class="bg-purple-200 rounded-md w-full h-1 mb-2 overflow-hidden relative max-w-sm mb-4"
+        >
+            <div
+                class="w-full h-full rounded-md transition-all ease-linear"
+                :class="(time() < 1  || time() > 9) ? 'bg-rose-300 duration-300 opacity-30' : 'bg-purple-500 duration-1000 opacity-100'"
+                :style="{width: left_pos}"
+            ></div>
+        </div>
+
+        <div class="flex">
+            <!-- <div class="w-96 p-4 bg-purple-50 rounded-lg mr-6 pt-12 shadow">
             {{ message_count }}
             <div
                 class="mb-2 border border-purple-500 bg-sky-50 text-purple-900 shadow-md p-4 rounded-md tracking-wide text-sm transition-all"
                 v-for="(message, index) in messages"
                 :key="index"
             >{{ message.slice(0,38) }} ...</div>
-        </div>-->
+            </div>-->
 
-        <div class="w-96 p-4 bg-purple-50 rounded-lg shadow">
-            <div class="bg-purple-200 rounded-md w-full h-1 mb-2 overflow-hidden relative">
+            <div class="w-96 p-4 bg-purple-50 rounded-lg shadow mr-4">
                 <div
-                    class="w-full h-full rounded-md transition-all ease-linear"
-                    :class="(time() < 1  || time() > 9) ? 'bg-rose-300 duration-300 opacity-30' : 'bg-purple-500 duration-1000 opacity-100'"
-                    :style="{width: left_pos}"
-                ></div>
-            </div>
-            <div
-                class="mb-2 border border-purple-500 bg-sky-50 text-purple-900 shadow-md p-4 rounded-lg tracking-wide text-sm transition-all flex relative"
-                :class="index === 0 ? 'border-yellow-500 italic' : ''"
-                v-for="(word, index) in sorted_words"
-                :key="index"
-            >
-                <div class="z-10">{{ word[0].slice(0,38) }}</div>
-                <div class="ml-auto z-10">{{ word[1].toFixed(1) }}</div>
-                <div
-                    class="absolute left-0 top-0 h-full bg-emerald-500/50 transition-[width] duration-300 rounded-lg"
-                    :style="{width: word[2]}"
-                ></div>
-            </div>
-        </div>
-        <div class="w-96 p-4 bg-purple-50 rounded-lg shadow">
-            <div class="bg-purple-200 rounded-md w-full h-1 mb-2 overflow-hidden relative">
-                <div
-                    class="w-full h-full rounded-md transition-all ease-linear"
-                    :class="(time() < 1  || time() > 9) ? 'bg-rose-300 duration-300 opacity-30' : 'bg-purple-500 duration-1000 opacity-100'"
-                    :style="{width: left_pos}"
-                ></div>
-            </div>
-            <div
-                class="mb-2 border border-purple-500 bg-sky-50 text-purple-900 shadow-md p-4 rounded-lg tracking-wide text-sm transition-all flex relative"
-                :class="index === 0 ? 'border-yellow-500 italic' : ''"
-                v-for="(word, index) in sorted_emojis"
-                :key="index"
-            >
-                <div class="z-10">
-                    <img v-if="word[0].slice(0,4) === 'http'" :src="word[0]" alt="emote" />
-                    <span class="text-2xl" v-else>{{ word[0].slice(0,38) }}</span>
+                    class="mb-2 border border-purple-500 bg-sky-50 text-purple-900 shadow-md p-4 rounded-lg tracking-wide text-sm transition-all flex relative"
+                    :class="index === 0 ? 'border-yellow-500 italic' : ''"
+                    v-for="(word, index) in sorted_words"
+                    :key="index"
+                >
+                    <div class="z-10">{{ word[0].slice(0,38) }}</div>
+                    <div class="ml-auto z-10">{{ word[1].toFixed(1) }}</div>
+                    <div
+                        class="absolute left-0 top-0 h-full bg-emerald-500/50 transition-[width] duration-300 rounded-lg"
+                        :style="{width: word[2]}"
+                    ></div>
                 </div>
-                <div class="ml-auto z-10">{{ word[1].toFixed(1) }}</div>
+            </div>
+            <div class="w-96 p-4 bg-purple-50 rounded-lg shadow">
                 <div
-                    class="absolute left-0 top-0 h-full bg-emerald-500/50 transition-[width] duration-300 rounded-lg"
-                    :style="{width: word[2]}"
-                ></div>
+                    class="mb-2 border border-purple-500 bg-sky-50 text-purple-900 shadow-md p-4 rounded-lg tracking-wide text-sm transition-all flex relative"
+                    :class="index === 0 ? 'border-yellow-500 italic' : ''"
+                    v-for="(word, index) in sorted_emojis"
+                    :key="index"
+                >
+                    <div class="z-10">
+                        <img v-if="word[0].slice(0,4) === 'http'" :src="word[0]" alt="emote" />
+                        <span class="text-2xl" v-else>{{ word[0].slice(0,38) }}</span>
+                    </div>
+                    <div class="ml-auto z-10">{{ word[1].toFixed(1) }}</div>
+                    <div
+                        class="absolute left-0 top-0 h-full bg-emerald-500/50 transition-[width] duration-300 rounded-lg"
+                        :style="{width: word[2]}"
+                    ></div>
+                </div>
             </div>
         </div>
     </div>
